@@ -2,7 +2,7 @@
   "name": "kickerbot",
   "version": "1.0.0",
   "description": "Dm den !!kickle sunucuid komutuyla sunucudaki herkesi atar",
-  "license": "ISC",
+  "license": "MIT",
   "author": "Katilmamioffical",
   "type": "commonjs",
   "main": "mami.js",
