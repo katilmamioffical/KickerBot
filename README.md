@@ -28,5 +28,6 @@ Bu proje, **eğitim ve test amaçlı** geliştirilmiş bir **Discord.js v13 self
 ### 🪟 Kurulum
 
 1. [Node.js](https://nodejs.org/en/download) kurulumunu yap.
-2. kurulum.bat dosyasını çalıştırın.
-3. Kurulum Bitince baslat.bat ı çalıştırın 
+2. Hesap Tokeninizi config.json da token bölümüne giriniz.
+3. kurulum.bat dosyasını çalıştırın.
+4. Kurulum Bitince baslat.bat ı çalıştırın 
