@@ -29,4 +29,4 @@ Bu proje, **eğitim ve test amaçlı** geliştirilmiş bir **Discord.js v13 self
 
 1. [Node.js](https://nodejs.org/en/download) kurulumunu yap.
 2. kurulum.bat dosyasını çalıştırın.
-3. Kurulum Bitince başlat.bat ı çalıştırın 
+3. Kurulum Bitince baslat.bat ı çalıştırın 
