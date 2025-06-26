@@ -1,0 +1,15 @@
+{
+  "name": "kickerbot",
+  "version": "1.0.0",
+  "description": "Dm den !!kickle sunucuid komutuyla sunucudaki herkesi atar",
+  "license": "ISC",
+  "author": "Katilmamioffical",
+  "type": "commonjs",
+  "main": "mami.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "discord.js-selfbot-v13": "^3.6.1"
+  }
+}
