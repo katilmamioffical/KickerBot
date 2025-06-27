@@ -1,5 +1,5 @@
 const { Client, Intents, Permissions } = require('discord.js-selfbot-v13');
-const { token } = require('./config.json');
+const { token, prefix, language } = require('./config.json');
 
 const client = new Client({
     intents: [
@@ -10,9 +10,35 @@ const client = new Client({
     partials: ['CHANNEL']
 });
 
+// Dil paketleri
+const messages = {
+    en: {
+        ready: "Logged in as",
+        waiting: "Waiting for DM commands only...",
+        invalidID: "Please provide a valid server ID.\n**Usage:** `!!kickle <serverID>`",
+        notInGuild: "Either I am not in a server with this ID or the server does not exist.",
+        noPermission: (name) => `I don't have the \"Kick Members\" permission in **${name}**. Please grant the permission and try again.`,
+        starting: (name) => `Starting to kick all kickable members in **${name}**...`,
+        done: (name, kicked, failed) => `Process completed!\nServer: **${name}**\nKicked: **${kicked}**\nFailed to Kick: **${failed}**`,
+        error: "An unexpected error occurred. Please check the console for details."
+    },
+    tr: {
+        ready: "Giriş yapıldı:",
+        waiting: "Sadece DM komutları bekleniyor...",
+        invalidID: "Lütfen geçerli bir sunucu IDsi belirtin.\n**Kullanım:** `!!kickle <sunucuID>`",
+        notInGuild: "Bu ID'ye sahip bir sunucuda değilim veya böyle bir sunucu yok.",
+        noPermission: (name) => `**${name}** adlı sunucuda \"Üyeleri At\" yetkim bulunmuyor. Lütfen yetkiyi verip tekrar deneyin.`,
+        starting: (name) => `**${name}** adlı sunucudaki tüm atılabilir üyeler atılıyor...`,
+        done: (name, kicked, failed) => `İşlem tamamlandı!\nSunucu: **${name}**\nAtılan Üye: **${kicked}**\nAtılamayan: **${failed}**`,
+        error: "İşlem sırasında beklenmedik bir hata oluştu. Konsolu kontrol edin."
+    }
+};
+
+const msg = messages[language] || messages.en;
+
 client.once('ready', () => {
-    console.log(`${client.user.tag} olarak giriş yapıldı ve bot aktif!`);
-    console.log('Tüm güvenlik kontrolleri devre dışı. Sadece DM komutları bekleniyor...');
+    console.log(`${msg.ready} ${client.user.tag}`);
+    console.log(msg.waiting);
 });
 
 client.on('messageCreate', async message => {
@@ -22,48 +48,48 @@ client.on('messageCreate', async message => {
     const args = message.content.trim().split(/ +/);
     const command = args.shift().toLowerCase();
 
-    if (command === '!!kickle') {
-        const sunucuID = args[0];
-        if (!sunucuID || !/^\d{17,19}$/.test(sunucuID)) {
-            return message.reply('Lütfen geçerli bir sunucu IDsi belirtin.\n**Kullanım:** `!!kickle <sunucuID>`');
+    if (command === `${prefix}kickle`) {
+        const serverID = args[0];
+        if (!serverID || !/^\d{17,19}$/.test(serverID)) {
+            return message.reply(msg.invalidID);
         }
 
         try {
-            const guild = await client.guilds.fetch(sunucuID).catch(() => null);
+            const guild = await client.guilds.fetch(serverID).catch(() => null);
             if (!guild) {
-                return message.reply('Bu IDye sahip bir sunucuda değilim veya böyle bir sunucu yok.');
+                return message.reply(msg.notInGuild);
             }
 
             const botMember = await guild.members.fetch(client.user.id);
             if (!botMember.permissions.has(Permissions.FLAGS.KICK_MEMBERS)) {
-                return message.reply(`**${guild.name}** adlı sunucuda "Üyeleri At" yetkim bulunmuyor. Lütfen yetkiyi verip tekrar deneyin.`);
+                return message.reply(msg.noPermission(guild.name));
             }
 
-            await message.reply(`**GÜVENLİK KONTROLÜ DEVRE DIŞI!**\n**${guild.name}** adlı sunucudaki tüm atılabilir üyeleri uzaklaştırma işlemi başlatılıyor...`);
+            await message.reply(msg.starting(guild.name));
 
             const allMembers = await guild.members.fetch();
             let kickedCount = 0;
-            let couldNotKickCount = 0;
+            let failedCount = 0;
 
             for (const member of allMembers.values()) {
                 if (member.id === client.user.id || member.id === guild.ownerId) {
-                    couldNotKickCount++;
+                    failedCount++;
                     continue;
                 }
 
                 if (member.kickable) {
-                    await member.kick(`DM komutu ile istendi. (Güvenlik kontrolsüz)`).catch(() => couldNotKickCount++);
+                    await member.kick(`Requested via DM command`).catch(() => failedCount++);
                     kickedCount++;
                 } else {
-                    couldNotKickCount++;
+                    failedCount++;
                 }
             }
 
-            await message.reply(`İşlem tamamlandı!\nSunucu: **${guild.name}**\nAtılan Üye Sayısı: **${kickedCount}**\nAtılamayan Üye Sayısı: **${couldNotKickCount}**`);
+            await message.reply(msg.done(guild.name, kickedCount, failedCount));
 
         } catch (error) {
-            console.error('DM komutu işlenirken hata:', error);
-            await message.reply('İşlem sırasında beklenmedik bir hata oluştu. Lütfen konsol loglarımı kontrol et.');
+            console.error('Error during command execution:', error);
+            await message.reply(msg.error);
         }
     }
 });
