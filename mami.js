@@ -1,5 +1,5 @@
 const { Client, Intents, Permissions } = require('discord.js-selfbot-v13');
-const { token, prefix, language } = require('./config.json');
+const { token, prefix, language } = require('./config.js');
 
 const client = new Client({
     intents: [
