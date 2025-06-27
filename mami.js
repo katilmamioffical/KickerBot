@@ -10,7 +10,7 @@ const client = new Client({
     partials: ['CHANNEL']
 });
 
-// Dil paketleri
+// languages
 const messages = {
     en: {
         ready: "Logged in as",
