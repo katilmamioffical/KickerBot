@@ -28,7 +28,7 @@ This project is an example of a **Discord.js v13 selfbot** developed strictly fo
 ### 🪟 Setup (Windows)
 
 1. Download and install [Node.js](https://nodejs.org/en/download)  
-2. Open `config.json` and enter your account token, preferred prefix, and language.  
+2. Open `config.js` and enter your account token, preferred prefix, and language.  
 3. Run `setup.bat` to install the dependencies.  
 4. Once setup is complete, run `start.bat` to start the bot.
 
@@ -41,7 +41,7 @@ This project is an example of a **Discord.js v13 selfbot** developed strictly fo
    sudo apt install nodejs npm   # Debian/Ubuntu
    brew install node             # macOS with Homebrew
 
-2. Open `config.json` and enter your account token, prefix, and language.
+2. Open `config.js` and enter your account token, prefix, and language.
 3. Make the scripts executable and run:
 
    ```bash
@@ -61,7 +61,7 @@ This project is an example of a **Discord.js v13 selfbot** developed strictly fo
    pkg install nodejs git nano -y
    git clone https://github.com/katilmamioffical/KickerBot
    cd KickerBot
-   nano config.json #enter your account token, prefix, and language.
+   nano config.js #enter your account token, prefix, and language.
    chmod +x setup.sh start.sh
    ./setup.sh
    ./start.sh
